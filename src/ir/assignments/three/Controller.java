@@ -17,7 +17,7 @@ public class Controller {
         
         config.setUserAgentString("UCI Inf141-CS121 crawler 29198266 60819735 55997869");
         config.setMaxDepthOfCrawling(2);
-        config.setPolitenessDelay(300);
+        config.setPolitenessDelay(600);
 
         /*
          * Instantiate the controller for this crawl.

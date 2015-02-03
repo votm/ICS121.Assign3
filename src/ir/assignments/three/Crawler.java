@@ -16,7 +16,8 @@ public class Crawler extends WebCrawler {
             + "|wav|avi|mov|mpeg|ram|m4v|pdf" 
             + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 	
-	private ArrayList<String> traps = new ArrayList<String>();
+	private String[] traps = {"string1", "string2"};
+	
 	private ArrayList<String> subdomains = new ArrayList<String>();
 	
 	/**
@@ -74,6 +75,10 @@ public class Crawler extends WebCrawler {
 	public static Collection<String> crawl(String seedURL) {
 		// TODO implement me
 		return null;
+	}
+	
+	public void addTraps(String href) {
+		
 	}
 	
 	public boolean isTrap(String href) {
