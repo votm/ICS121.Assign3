@@ -15,7 +15,7 @@ public class Controller {
         
         config.setCrawlStorageFolder(crawlStorageFolder);
         
-        config.setUserAgentString("UCI Inf141-CS121 crawler 29198266 60819735");
+        config.setUserAgentString("UCI Inf141-CS121 crawler 29198266 60819735 55997869");
         config.setMaxDepthOfCrawling(2);
         config.setPolitenessDelay(300);
 
