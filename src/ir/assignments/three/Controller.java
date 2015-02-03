@@ -12,7 +12,11 @@ public class Controller {
         int numberOfCrawlers = 7;
 
         CrawlConfig config = new CrawlConfig();
+        
         config.setCrawlStorageFolder(crawlStorageFolder);
+        
+        config.setUserAgentString("UCI Inf141-CS121 crawler 29198266 60819735");
+        config.setMaxDepthOfCrawling(2);
 
         /*
          * Instantiate the controller for this crawl.
@@ -27,7 +31,7 @@ public class Controller {
          * URLs that are fetched and then the crawler starts following links
          * which are found in these pages
          */
-        controller.addSeed("http://www.ics.uci.edu/");
+        controller.addSeed("http://ics.uci.edu/");
 
         /*
          * Start the crawl. This is a blocking operation, meaning that your code
