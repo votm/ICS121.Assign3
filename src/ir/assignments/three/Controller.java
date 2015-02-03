@@ -27,6 +27,11 @@ public class Controller {
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
 
+        String[] crawlerDomains = {"http://www.ics.uci.edu/"};
+        
+        controller.setCustomData(crawlerDomains);
+        
+        
         /*
          * For each crawl, you need to add some seed urls. These are the first
          * URLs that are fetched and then the crawler starts following links

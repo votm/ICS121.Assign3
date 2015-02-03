@@ -47,11 +47,15 @@ public class Crawler extends WebCrawler {
             	}
             }
             if (!alreadyVisited) {
-            	System.out.println(alreadyVisited);
-            	System.out.println(getSubdomain(url));
+            	System.out.println("Current subdomain: " + getSubdomain(url));
+            	System.out.println("Already visited?: " + alreadyVisited);
             	subdomains.add(getSubdomain(url));
             }
-
+            for(String subdomain : subdomains) {
+        		System.out.print(subdomain + " ");
+        	}
+        	System.out.println("");
+        	
             if (page.getParseData() instanceof HtmlParseData) {
                     HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
                     String text = htmlParseData.getText();
