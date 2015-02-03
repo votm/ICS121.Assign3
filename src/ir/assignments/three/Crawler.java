@@ -5,6 +5,7 @@ import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -15,6 +16,9 @@ public class Crawler extends WebCrawler {
             + "|wav|avi|mov|mpeg|ram|m4v|pdf" 
             + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 	
+	private ArrayList<String> traps = new ArrayList<String>();
+	private ArrayList<String> subdomains = new ArrayList<String>();
+	
 	/**
      * You should implement this function to specify whether
      * the given url should be crawled or not (based on your
@@ -23,7 +27,7 @@ public class Crawler extends WebCrawler {
     @Override
     public boolean shouldVisit(WebURL url) {
             String href = url.getURL().toLowerCase();
-            return !FILTERS.matcher(href).matches() && href.contains("ics.uci.edu/");
+            return !FILTERS.matcher(href).matches() && href.contains("ics.uci.edu/") && !isTrap(href);
     }
 
     /**
@@ -34,6 +38,18 @@ public class Crawler extends WebCrawler {
     public void visit(Page page) {          
             String url = page.getWebURL().getURL();
             System.out.println("URL: " + url);
+            
+            boolean alreadyVisited = false;
+            for (String subdomain : subdomains) {
+            	if (url.startsWith(subdomain)) {
+            		alreadyVisited = true;
+            	}
+            }
+            if (!alreadyVisited) {
+            	System.out.println(alreadyVisited);
+            	System.out.println(getSubdomain(url));
+            	subdomains.add(getSubdomain(url));
+            }
 
             if (page.getParseData() instanceof HtmlParseData) {
                     HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
@@ -58,5 +74,18 @@ public class Crawler extends WebCrawler {
 	public static Collection<String> crawl(String seedURL) {
 		// TODO implement me
 		return null;
+	}
+	
+	public boolean isTrap(String href) {
+		for (String trap : traps) {
+			if (href.startsWith(trap)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public String getSubdomain(String url) {
+		return url.split(".ics.uci.edu")[0];
 	}
 }
