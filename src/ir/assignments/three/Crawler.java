@@ -81,10 +81,6 @@ public class Crawler extends WebCrawler {
 		return null;
 	}
 	
-	public void addTraps(String href) {
-		
-	}
-	
 	public boolean isTrap(String href) {
 		for (String trap : traps) {
 			if (href.startsWith(trap)) {

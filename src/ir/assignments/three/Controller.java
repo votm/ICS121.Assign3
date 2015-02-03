@@ -44,5 +44,8 @@ public class Controller {
          * will reach the line after this only when crawling is finished.
          */
         controller.start(Crawler.class, numberOfCrawlers);
+        
+        //write info to Subdomains.txt
+        //write info to CommonWords.txt
 	}
 }
