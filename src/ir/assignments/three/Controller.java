@@ -16,7 +16,7 @@ public class Controller {
         config.setCrawlStorageFolder(crawlStorageFolder);
         
         config.setUserAgentString("UCI Inf141-CS121 crawler 29198266 60819735 55997869");
-        config.setMaxDepthOfCrawling(2);
+        config.setMaxDepthOfCrawling(1);
         config.setPolitenessDelay(600);
 
         /*
@@ -43,6 +43,6 @@ public class Controller {
          * Start the crawl. This is a blocking operation, meaning that your code
          * will reach the line after this only when crawling is finished.
          */
-        controller.start(Crawler.class, numberOfCrawlers);    
+        controller.start(Crawler.class, numberOfCrawlers);
 	}
 }

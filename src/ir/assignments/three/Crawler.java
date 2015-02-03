@@ -16,7 +16,7 @@ public class Crawler extends WebCrawler {
             + "|wav|avi|mov|mpeg|ram|m4v|pdf" 
             + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 	
-	private String[] traps = {"string1", "string2"};
+	private String[] traps = {"http://archives.ics.uci.edu", "string2"};
 	
 	private ArrayList<String> subdomains = new ArrayList<String>();
 	
