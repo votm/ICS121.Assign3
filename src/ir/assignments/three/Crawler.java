@@ -130,10 +130,19 @@ public class Crawler extends WebCrawler {
 		return false;
 	}
 	
+	public static ArrayList<String> removeStopWords(ArrayList<String> allWords) {
+		for (String word : allWords) {
+			if (isStopWord(word)) {
+				allWords.remove(word);
+			}
+		}
+		return allWords;
+	}
+	
 	public static void printMostCommonWords () {
-		List<Frequency> bigStringWordFrequencies = WordFrequencyCounter.computeWordFrequencies(allWords);
+		List<Frequency> wordFrequencies = WordFrequencyCounter.computeWordFrequencies(removeStopWords(allWords));
 		for (int i = 0; i < 500; i++) {
-			System.out.println(bigStringWordFrequencies.get(i).toString());
+			System.out.println(wordFrequencies.get(i).toString());
 		}
 	}
 	
