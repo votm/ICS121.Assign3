@@ -1,9 +1,18 @@
 package ir.assignments.three;
 
+import edu.uci.ics.crawler4j.crawler.CrawlConfig;
+import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
+import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
+
+import ir.assignments.two.a.Frequency;
+import ir.assignments.two.a.Utilities;
+import ir.assignments.two.b.WordFrequencyCounter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,7 +27,8 @@ public class Crawler extends WebCrawler {
 	
 	private String[] traps = {"http://archives.ics.uci.edu", "string2"};
 	
-	private ArrayList<String> subdomains = new ArrayList<String>();
+	public static ArrayList<String> urls = new ArrayList<String>();
+	public static ArrayList<String> subdomains = new ArrayList<String>();
 	
 	/**
      * You should implement this function to specify whether
@@ -28,7 +38,7 @@ public class Crawler extends WebCrawler {
     @Override
     public boolean shouldVisit(WebURL url) {
             String href = url.getURL().toLowerCase();
-            return !FILTERS.matcher(href).matches() && href.contains("ics.uci.edu/") && !isTrap(href);
+            return !FILTERS.matcher(href).matches() && href.contains("www.ics.uci.edu/") && !isTrap(href);
     }
 
     /**
@@ -36,26 +46,36 @@ public class Crawler extends WebCrawler {
      * to be processed by your program.
      */
     @Override
-    public void visit(Page page) {          
+    public void visit(Page page) {
+    		System.out.println("\nGot new page");
             String url = page.getWebURL().getURL();
+            urls.add(url);
             System.out.println("URL: " + url);
             
-            boolean alreadyVisited = false;
+            // Have we already visited this subdomain?
+            boolean subdomainVisited = false;
+            // Iterate through the list of subdomains
             for (String subdomain : subdomains) {
-            	if (url.startsWith(subdomain)) {
-            		alreadyVisited = true;
+            	// If our url's subdomain is in the list,
+            	if (url.split("http://")[1].startsWith(subdomain)) {
+            		// We've already visited url's subdomain
+            		subdomainVisited = true;
             	}
             }
-            if (!alreadyVisited) {
-            	System.out.println("Current subdomain: " + getSubdomain(url));
-            	System.out.println("Already visited?: " + alreadyVisited);
+            // If we haven't visited url's subdomain
+            if (!subdomainVisited) {
+            	// Add url's subdomain to our list
             	subdomains.add(getSubdomain(url));
             }
+            
+            // Debugging
+            System.out.print("Subdomains visited so far: ");
             for(String subdomain : subdomains) {
         		System.out.print(subdomain + " ");
         	}
         	System.out.println("");
         	
+        	// Information about the page
             if (page.getParseData() instanceof HtmlParseData) {
                     HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
                     String text = htmlParseData.getText();
@@ -68,20 +88,7 @@ public class Crawler extends WebCrawler {
             }
     }
 	
-	/**
-	 * This method is for testing purposes only. It does not need to be used
-	 * to answer any of the questions in the assignment. However, it must
-	 * function as specified so that your crawler can be verified programatically.
-	 * 
-	 * This methods performs a crawl starting at the specified seed URL. Returns a
-	 * collection containing all URLs visited during the crawl.
-	 */
-	public static Collection<String> crawl(String seedURL) {
-		// TODO implement me
-		return null;
-	}
-	
-	public boolean isTrap(String href) {
+    public boolean isTrap(String href) {
 		for (String trap : traps) {
 			if (href.startsWith(trap)) {
 				return true;
@@ -89,8 +96,57 @@ public class Crawler extends WebCrawler {
 		}
 		return false;
 	}
+    
+    public String getSubdomain(String url) {
+		return url.split(".ics.uci.edu")[0].split("http://")[1];
+	}
 	
-	public String getSubdomain(String url) {
-		return url.split(".ics.uci.edu")[0];
+	public static ArrayList<String> getSubdomainList () {
+		return subdomains;
+	}
+	
+	/**
+	 * This method is for testing purposes only. It does not need to be used
+	 * to answer any of the questions in the assignment. However, it must
+	 * function as specified so that your crawler can be verified programatically.
+	 * 
+	 * This methods performs a crawl starting at the specified seed URL. Returns a
+	 * collection containing all URLs visited during the crawl.
+	 * @throws Exception 
+	 */
+	public static Collection<String> crawl(String seedURL) throws Exception {
+		String crawlStorageFolder = "/data/crawl/root";
+		int numberOfCrawlers = 7;
+		
+		CrawlConfig config = new CrawlConfig();
+		
+		config.setCrawlStorageFolder(crawlStorageFolder);
+		
+		config.setUserAgentString("UCI Inf141-CS121 crawler 29198266 60819735 55997869");
+		config.setMaxDepthOfCrawling(1);
+		config.setPolitenessDelay(600);
+		
+		/*
+		 * Instantiate the controller for this crawl.
+		 */
+		PageFetcher pageFetcher = new PageFetcher(config);
+		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+		CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
+		
+		/*
+		 * For each crawl, you need to add some seed urls. These are the first
+		 * URLs that are fetched and then the crawler starts following links
+		 * which are found in these pages
+		 */
+		controller.addSeed(seedURL);
+		
+		/*
+		 * Start the crawl. This is a blocking operation, meaning that your code
+		 * will reach the line after this only when crawling is finished.
+		 */
+		controller.start(Crawler.class, numberOfCrawlers);
+		
+		return urls;
 	}
 }
