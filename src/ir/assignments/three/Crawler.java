@@ -11,7 +11,6 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 
 import ir.assignments.two.a.Frequency;
-import ir.assignments.two.a.Utilities;
 import ir.assignments.two.b.WordFrequencyCounter;
 
 import java.util.ArrayList;
@@ -27,13 +26,14 @@ public class Crawler extends WebCrawler {
             + "|wav|avi|mov|mpeg|ram|m4v|pdf" 
             + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 	
-	private String[] traps = {"http://archive.ics.uci.edu", "http://calendar.ics.uci.edu", "http://wics.ics.uci.edu"};
+	private String[] traps = {"http://archive.ics.uci.edu", "http://calendar.ics.uci.edu", "http://wics.ics.uci.edu",
+			"http://drzaius.ics.uci.edu"};
 	
 	public static ArrayList<String> urls = new ArrayList<String>();
 	public static ArrayList<String> subdomains = new ArrayList<String>();
 	public static int longestPageWordCount = 0;
 	public static String longestPageUrl = "";
-	public static String bigString = "";
+	public static ArrayList<String> allWords = new ArrayList<String>();
 	
 	/**
      * You should implement this function to specify whether
@@ -87,9 +87,11 @@ public class Crawler extends WebCrawler {
                     String html = htmlParseData.getHtml();
                     List<WebURL> links = htmlParseData.getOutgoingUrls();
                     
-                    bigString += text + " ";
+                    List<String> words = tokenizeString(text,false); 
                     
-                    int wordCount = tokenizeString(text,false).size(); 
+                    allWords.addAll(words);
+                                        
+                    int wordCount = words.size(); 
                     
                     if (wordCount > longestPageWordCount) {
                     	longestPageWordCount = wordCount;
@@ -150,8 +152,7 @@ public class Crawler extends WebCrawler {
 	}
 	
 	public static void printMostCommonWords () {
-		ArrayList<String> tokenizedBigString = tokenizeString(bigString,true);
-		List<Frequency> bigStringWordFrequencies = WordFrequencyCounter.computeWordFrequencies(tokenizedBigString);
+		List<Frequency> bigStringWordFrequencies = WordFrequencyCounter.computeWordFrequencies(allWords);
 		for (int i = 0; i < 500; i++) {
 			System.out.println(bigStringWordFrequencies.get(i).toString());
 		}
@@ -179,8 +180,7 @@ public class Crawler extends WebCrawler {
 		config.setCrawlStorageFolder(crawlStorageFolder);
 		
 		config.setUserAgentString("UCI Inf141-CS121 crawler 29198266 60819735 55997869");
-		config.setMaxDepthOfCrawling(1);
-		config.setPolitenessDelay(600);
+		config.setPolitenessDelay(300);
 		
 		/*
 		 * Instantiate the controller for this crawl.

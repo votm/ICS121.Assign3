@@ -1,18 +1,11 @@
 package ir.assignments.three;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import ir.assignments.two.a.Frequency;
 import ir.assignments.two.a.Utilities;
 import ir.assignments.two.b.WordFrequencyCounter;
-import edu.uci.ics.crawler4j.crawler.CrawlConfig;
-import edu.uci.ics.crawler4j.crawler.CrawlController;
-import edu.uci.ics.crawler4j.fetcher.PageFetcher;
-import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
-import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
-
 public class Controller {
 	public static void main(String[] args) throws Exception {
 		// Create a timestamp for start of crawl
