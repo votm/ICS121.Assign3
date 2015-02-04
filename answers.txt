@@ -1,4 +1,5 @@
 Put your answers to the questions here, on in a similarly named .doc or .pdf file.
 
-1. ???
-2. 
+1. 12792
+2. 9527
+4. http://www.ics.uci.edu/~ejw/authoring/protocol/rfc2518.fr.html - 36005 words

@@ -43,7 +43,7 @@ public class Crawler extends WebCrawler {
     @Override
     public boolean shouldVisit(WebURL url) {
             String href = url.getURL().toLowerCase();
-            return !FILTERS.matcher(href).matches() && href.contains("www.ics.uci.edu/") && !isTrap(href);
+            return !FILTERS.matcher(href).matches() && href.contains(".ics.uci.edu") && !isTrap(href);
     }
 
     /**
@@ -57,28 +57,7 @@ public class Crawler extends WebCrawler {
             urls.add(url);
             System.out.println("URL: " + url);
             
-            // Have we already visited this subdomain?
-            boolean subdomainVisited = false;
-            // Iterate through the list of subdomains
-            for (String subdomain : subdomains) {
-            	// If our url's subdomain is in the list,
-            	if (url.split("http://")[1].startsWith(subdomain)) {
-            		// We've already visited url's subdomain
-            		subdomainVisited = true;
-            	}
-            }
-            // If we haven't visited url's subdomain
-            if (!subdomainVisited) {
-            	// Add url's subdomain to our list
-            	subdomains.add(getSubdomain(url));
-            }
-            
-            // Debugging
-            System.out.print("Subdomains visited so far: ");
-            for(String subdomain : subdomains) {
-        		System.out.print(subdomain + " ");
-        	}
-        	System.out.println("");
+            subdomains.add(getSubdomain(url));
         	
         	// Information about the page
             if (page.getParseData() instanceof HtmlParseData) {
@@ -181,6 +160,7 @@ public class Crawler extends WebCrawler {
 		
 		config.setUserAgentString("UCI Inf141-CS121 crawler 29198266 60819735 55997869");
 		config.setPolitenessDelay(300);
+		config.setMaxDepthOfCrawling(1);
 		
 		/*
 		 * Instantiate the controller for this crawl.
