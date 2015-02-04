@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
@@ -83,6 +84,23 @@ public final class WordFrequencyCounter {
 			Frequency f = new Frequency(strKey, strElem);
 			result.add(f);
 		}
+		
+		Collections.sort(result, 
+	            new Comparator<Frequency>() {
+	                @Override
+	                public int compare(Frequency e1, Frequency e2) {
+	                	
+	                	//Compare the frequency value first
+	                	int c1 = Integer.compare(e2.getFrequency(), e1.getFrequency());
+	                	if(c1 == 0){
+	                		//if the frequency value is equal, compare the word value
+		                	return e1.getText().compareTo(e2.getText());
+	                	}
+
+	                	return c1;
+	                }
+	            }
+	    );
 		
 		return result;
 	}

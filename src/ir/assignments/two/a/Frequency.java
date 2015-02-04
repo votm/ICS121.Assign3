@@ -33,6 +33,6 @@ public final class Frequency {
 	
 	@Override
 	public String toString() {
-		return word + ":" + frequency;
+		return word + " : " + frequency;
 	}
 }
