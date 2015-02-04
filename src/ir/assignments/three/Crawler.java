@@ -131,9 +131,12 @@ public class Crawler extends WebCrawler {
 	}
 	
 	public static ArrayList<String> removeStopWords(ArrayList<String> allWords) {
-		for (String word : allWords) {
-			if (isStopWord(word)) {
-				allWords.remove(word);
+		for (int i = 0; i < allWords.size(); i++) {
+			if (isStopWord(allWords.get(i))) {
+				allWords.remove(i);
+				while (isStopWord(allWords.get(i))) {
+					allWords.remove(i);
+				}
 			}
 		}
 		return allWords;
@@ -168,8 +171,7 @@ public class Crawler extends WebCrawler {
 		config.setCrawlStorageFolder(crawlStorageFolder);
 		
 		config.setUserAgentString("UCI Inf141-CS121 crawler 29198266 60819735 55997869");
-		config.setPolitenessDelay(300);
-		config.setMaxDepthOfCrawling(1);
+		config.setPolitenessDelay(600);
 		
 		/*
 		 * Instantiate the controller for this crawl.
