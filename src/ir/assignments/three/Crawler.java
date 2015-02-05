@@ -26,13 +26,23 @@ public class Crawler extends WebCrawler {
             + "|wav|avi|mov|mpeg|ram|m4v|pdf" 
             + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 	
+	// List of known trap subdomains
 	private String[] traps = {"http://archive.ics.uci.edu", "http://calendar.ics.uci.edu", "http://wics.ics.uci.edu",
 			"http://drzaius.ics.uci.edu"};
 	
+	// The list of all urls visited
 	public static ArrayList<String> urls = new ArrayList<String>();
+	
+	// The list of all subdomains visited
+	// (duplicates allowed, as they will be passed into a frequency list-generating function later)
 	public static ArrayList<String> subdomains = new ArrayList<String>();
+	
+	// Information on the longest page visited so far
 	public static int longestPageWordCount = 0;
 	public static String longestPageUrl = "";
+	
+	// A list of all words from all pages
+	// (duplicates allowed, as they will be passed into a frequency list-generating function later)
 	public static ArrayList<String> allWords = new ArrayList<String>();
 	
 	/**
@@ -54,9 +64,12 @@ public class Crawler extends WebCrawler {
     public void visit(Page page) {
     		System.out.println("\nGot new page");
             String url = page.getWebURL().getURL();
+            
+            // Add the url to our list of urls visited
             urls.add(url);
             System.out.println("URL: " + url);
             
+            // Add the subdomain to our list of subdomains
             subdomains.add(getSubdomain(url));
         	
         	// Information about the page
@@ -66,12 +79,16 @@ public class Crawler extends WebCrawler {
                     String html = htmlParseData.getHtml();
                     List<WebURL> links = htmlParseData.getOutgoingUrls();
                     
+                    // Turn text into a list of words
                     List<String> words = tokenizeString(text,false); 
                     
+                    // Add words to our list of all words
                     allWords.addAll(words);
-                                        
+                    
+                    // Get the number of words on this page
                     int wordCount = words.size(); 
                     
+                    // If this page has more words than our current longest page, update our longest page info
                     if (wordCount > longestPageWordCount) {
                     	longestPageWordCount = wordCount;
                     	longestPageUrl = url;
