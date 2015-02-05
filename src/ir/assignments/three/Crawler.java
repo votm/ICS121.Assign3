@@ -1,3 +1,7 @@
+//Rex Rockwell #29198266
+//Leon Thai #55997869
+//Tuan Vo #60819735
+
 package ir.assignments.three;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -99,7 +103,11 @@ public class Crawler extends WebCrawler {
                     System.out.println("Number of outgoing links: " + links.size());
             }
     }
-	
+    
+    /*
+	 * This method is a helper method that we used
+	 * in our visit method to check if a link leads to a trap
+	 */
     public boolean isTrap(String href) {
 		for (String trap : traps) {
 			if (href.startsWith(trap)) {
@@ -109,14 +117,26 @@ public class Crawler extends WebCrawler {
 		return false;
 	}
     
+    /*
+	 * This method is a helper method that we used
+	 * in the visit method to parse out the subdomain
+	 */
     public String getSubdomain(String url) {
 		return url.split(".ics.uci.edu")[0].split("http://")[1];
 	}
 	
+    /*
+	 * This method is a helper methods used in 
+	 * the visit methods to add subdomain to a list of subdomains
+	 */
 	public static ArrayList<String> getSubdomainList () {
 		return subdomains;
 	}
 	
+	/*
+	 * This method takes a string, set it against our filters
+	 * and then add them to our tokenizedWords list
+	 */
 	public static ArrayList<String> tokenizeString (String str, boolean excludeStopWords) {
 		// The array to return
 		ArrayList<String> tokenizedWords = new ArrayList<String>();
@@ -140,6 +160,10 @@ public class Crawler extends WebCrawler {
 		return tokenizedWords;
 	}
 	
+	/*
+	 * This method is a helper method that check
+	 * if a word is a stopword
+	 */
 	public static boolean isStopWord (String word) {
 		if (Arrays.asList(stopwords).contains(word)) {
 			return true;
@@ -147,6 +171,10 @@ public class Crawler extends WebCrawler {
 		return false;
 	}
 	
+	/*
+	 * This method compare an array of words we collected with the list of stopwords
+	 * if a word in allWords is in stopwords, it is removed
+	 */
 	public static ArrayList<String> removeStopWords(ArrayList<String> allWords) {
 		for (int i = 0; i < allWords.size(); i++) {
 			if (isStopWord(allWords.get(i))) {
@@ -159,6 +187,10 @@ public class Crawler extends WebCrawler {
 		return allWords;
 	}
 	
+	/*
+	 * This method addresses the most common word that we encountered during our crawl
+	 * This satisfy question 5 of our assignment
+	 */
 	public static void printMostCommonWords () {
 		List<Frequency> wordFrequencies = WordFrequencyCounter.computeWordFrequencies(removeStopWords(allWords));
 		for (int i = 0; i < 500; i++) {
@@ -166,6 +198,10 @@ public class Crawler extends WebCrawler {
 		}
 	}
 	
+	/*
+	 * This method addresses the longest page through word count
+	 * This satisfy question 4 of our assignment
+	 */
 	public static void printLongestPageInfo () {
 		System.out.println("\nLongest Page Word Count: " + longestPageWordCount + "\nLongest Page URL: " + longestPageUrl);
 	}
@@ -213,7 +249,9 @@ public class Crawler extends WebCrawler {
 		
 		return urls;
 	}
-	
+		/*
+		 * This methods contains stopwords that we want our crawler to ignore
+		 */
 	private static String[] stopwords = {"a","about","above","after","again","against","all","am","an","and","any","are",
 			"aren't","as","at","be","because","been","before","being","below","between","both","but","by","can't",
 			"cannot","could","couldn't","did","didn't","do","does","doesn't","doing","don't","down","during","each",
